@@ -1,0 +1,22 @@
+- name: session#1 home assignment
+  hosts: webservers
+  remote_user: centos
+  become: yes
+
+  tasks:
+  - name: create new user
+    user:
+      name: opsschool
+      password: '$6$21P1VRT2CNpu2r$N3aVRiOJEs4T5rcgoTNWerGZDPUdgOAhNSg0yKNm2AAXpd3dUQJmIThf3ncasNDzq1iGBiCP/QIGM4o10KVEq0'
+      
+  - name: install epel repo
+    yum: name=epel-release state=present
+
+  - name: install ntp package
+    yum: name=ntp state=present
+
+  - name: copy ntpd config file
+    template: src=/home/ubuntu/ansible-role-example/files/ntp.conf dest=/etc/ntp.conf
+    
+  - name: restart ntp service
+    service: name=ntpd state=started
