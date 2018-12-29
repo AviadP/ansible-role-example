@@ -1,0 +1,21 @@
+- name: session#1 home assignment p2
+  hosts: webservers
+  remote_user: centos
+  become: yes
+
+  tasks:
+  - name: install httpd
+    yum: name=httpd state=present
+
+  - name: copy index file
+    template: src=/home/ubuntu/ansible-role-example/files/index.html dest=/var/www/html/index.html
+
+  - name: start apache server
+    service: name=httpd state=started enabled=yes
+
+  - name: test httpd server
+    uri:
+      url: http://localhost:80
+      method: GET
+      body_format: json
+      return_content: yes
